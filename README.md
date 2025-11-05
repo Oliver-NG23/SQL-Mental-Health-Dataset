@@ -26,9 +26,11 @@ El dataset proviene de [Kaggle](https://www.kaggle.com/datasets/anth7310/mental-
 ## ❓ Preguntas de Análisis SQL
 
 ### Nivel 1 – Exploración básica
-1. ¿Cuántos registros totales contiene la tabla?  
-2. ¿Cuántas columnas hay y cuáles son sus nombres?  
-3. ¿Cuál es la distribución de los encuestados por país o género?
+1. ¿Cuántas personas se encuestarón?
+```sql -- Crear una tabla de ejemplo CREATE TABLE empleados ( id INT PRIMARY KEY, nombre VARCHAR(100), puesto VARCHAR(50), salario DECIMAL(10, 2) ); -- Insertar datos INSERT INTO empleados (id, nombre, puesto, salario) VALUES (1, 'Ana López', 'Desarrolladora', 3500.00); -- Consultar datos SELECT * FROM empleados WHERE salario > 3000; ```
+
+1. ¿Cuántas columnas hay y cuáles son sus nombres?  
+2. ¿Cuál es la distribución de los encuestados por país o género?
 
 ### Nivel 2 – Filtrado y agrupaciones simples
 4. ¿Qué porcentaje de encuestados ha recibido tratamiento para su salud mental?  
