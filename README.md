@@ -27,7 +27,7 @@ El dataset proviene de [Kaggle](https://www.kaggle.com/datasets/anth7310/mental-
 
 ### Nivel 1 – Exploración básica
 1. ¿Cuántas personas se encuestarón?
-```sql
+```
 -- Crear una tabla de empleados
 CREATE TABLE empleados (
     id INT PRIMARY KEY,
