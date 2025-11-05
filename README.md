@@ -42,6 +42,7 @@ VALUES (1, 'Ana López', 'Desarrolladora', 3500.00);
 
 -- Consultar empleados con salario mayor a 3000
 SELECT * FROM empleados WHERE salario > 3000;
+```
 
 1. ¿Cuántas columnas hay y cuáles son sus nombres?  
 2. ¿Cuál es la distribución de los encuestados por país o género?
