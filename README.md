@@ -28,8 +28,8 @@ El dataset proviene de [Kaggle](https://www.kaggle.com/datasets/anth7310/mental-
 1. ¿Cúantos participantes aplicaron la encuesta durante los años?
 ```sql
 SELECT s.SurveyID, s.Description, COUNT(a.AnswerText) AS TotalAnswers
-FROM Answer a
-JOIN Survey s 
+FROM Answer AS a
+JOIN Survey AS s 
 ON a.SurveyID = s.SurveyID
 GROUP BY s.SurveyID, s.Description
 ORDER BY s.SurveyID;
@@ -106,7 +106,7 @@ JOIN Answer as a2
 JOIN Question q2
 	ON a2.QuestionID = q2.QuestionID
 WHERE q1.QuestionText LIKE '%How many employees%' 
-  AND q2.QuestionText LIKE '%treatment%' 
+  AND q2.QuestionText LIKE '%Have you ever sought treatment%' 
   AND a1.AnswerText NOT IN ('-1', 'N/A', '') AND a1.AnswerText IS NOT NULL
 GROUP BY Tamaño_de_Compañia
 ORDER BY Porcentaje_Tratamiento DESC;
