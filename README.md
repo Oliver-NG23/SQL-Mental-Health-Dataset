@@ -158,12 +158,10 @@ GROUP BY TipoTrabajo
 ORDER BY Total_Usuarios DESC;
 ```
 **Objetivo:** Identificar si el entorno de trabajo influye en los niveles de estrés o necesidad de tratamiento
+ 
+8. Calcula el percentil de salario por país y analiza si los trabajadores con salarios más altos (percentil 90 o superior) tienden a recibir más o menos tratamiento que el resto.
 
+9. ¿Qué factores (país, género, tamaño de empresa, cultura laboral) parecen correlacionarse más con el tratamiento?
 
-
-### Nivel 4 – Subconsultas y funciones avanzadas
-10. Para cada empresa, ¿qué porcentaje de empleados se siente cómodo hablando de salud mental con su supervisor?  
-11. ¿Cómo cambia el nivel de estrés promedio según los años trabajados en la empresa (agrupando por rangos)?  
-12. Calcula el percentil de salario por país y analiza si los trabajadores con salarios más altos (percentil 90 o superior) tienden a recibir más o menos tratamiento que el resto.
-
+10. 
 ---
