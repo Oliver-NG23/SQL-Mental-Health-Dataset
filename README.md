@@ -113,7 +113,28 @@ ORDER BY Porcentaje_Tratamiento DESC;
 ```
 **Objetivo:** Conocer si hay relacion entre el tamaño de empresa y la probabilidad de recibir tratamiento
 
-6. ¿Cuántos encuestados indicaron que su empresa tiene una política de salud mental, y cuántos no?
+6. ¿Cuál es la realción entre el género y la probabilidad de haber recibido tratamiento?
+```sql
+SELECT 
+    CASE WHEN a1.AnswerText IN ('Masculine','Male','male','MALE','masculino') THEN 'Male'
+    WHEN a1.AnswerText IN ('Female','female','FEMALE') THEN 'Female' ELSE 'Other' END AS Genero,
+    COUNT(DISTINCT a1.UserID) AS Total_Usuarios,
+    ROUND(COUNT(DISTINCT a1.UserID)*100.0 / SUM(COUNT(DISTINCT a1.UserID)) OVER (),2) as Porcentaje
+FROM Answer AS a1
+JOIN Question AS q1 
+	ON a1.QuestionID = q1.QuestionID
+WHERE q1.QuestionText LIKE '%What is your gender%' AND a1.AnswerText NOT IN ('-1','43','N/A','')
+	AND a1.UserID IN (
+      SELECT subA.UserID
+      FROM Answer AS subA
+      JOIN Question as subQ
+      	ON subA.QuestionID = subQ.questionid
+      WHERE subQ.questiontext LIKE '%Have you ever sought treatment%'
+      	AND subA.AnswerText = '1')
+GROUP BY Genero
+ORDER BY Total_Usuarios DESC;
+```
+**Objetivo:** Conocer si existen diferencias de genero en la busqueda de tratamiento
 
 ### Nivel 3 – Relaciones e indicadores más complejos 
 8. ¿Cómo varía la edad promedio entre quienes han recibido tratamiento y quienes no?  
