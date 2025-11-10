@@ -136,12 +136,12 @@ ORDER BY Total_Usuarios DESC;
 ```
 **Objetivo:** Conocer si existen diferencias de genero en la busqueda de tratamiento
 
-8. ¿Las personas que trabajan en diferentes entornos de trabajo muestran diferencias en salud mental?
+7. ¿Las personas que trabajan en diferentes entornos de trabajo muestran diferencias en salud mental?
 ```sql
 SELECT 
     CASE WHEN a1.AnswerText= 'Sometimes' THEN 'Hybrid' 
     WHEN a1.AnswerText='Always' THEN 'Presencial'
-    when a1.AnswerText='Never' then 'Remote'end AS TipoTrabajo,
+    when a1.AnswerText='Never' then 'Remote' END AS TipoTrabajo,
     COUNT(DISTINCT a1.UserID) AS Total_Usuarios
 FROM Answer AS a1
 JOIN Question AS q1 
