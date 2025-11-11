@@ -159,9 +159,88 @@ ORDER BY Total_Usuarios DESC;
 ```
 **Objetivo:** Identificar si el entorno de trabajo influye en los niveles de estrés o necesidad de tratamiento
  
-8. Calcula el percentil de salario por país y analiza si los trabajadores con salarios más altos (percentil 90 o superior) tienden a recibir más o menos tratamiento que el resto.
+8. ¿Qué factores (país, género, tamaño de empresa, cultura laboral) parecen correlacionarse más con el tratamiento?
+```sql
+WITH pais AS (
+    SELECT a.UserID,
+        CASE 
+            WHEN a.AnswerText IN ('United States of America', 'United States') THEN 'United States'
+            ELSE a.AnswerText END AS Pais
+    FROM Answer a
+    JOIN Question q 
+  		ON a.QuestionID = q.QuestionID
+    WHERE q.QuestionText LIKE '%What country do you live%'
+      AND a.AnswerText NOT IN ('', '-1', 'N/A') AND a.answertext IS NOT NULL
+),
+genero AS (
+  	SELECT a1.UserID,
+    	CASE 
+  			WHEN a1.AnswerText IN ('Masculine','Male','male','MALE','masculino') THEN 'Male'
+    		WHEN a1.AnswerText IN ('Female','female','FEMALE') THEN 'Female' ELSE 'Other' END AS Genero
+	FROM Answer AS a1
+	JOIN Question AS q1 
+		ON a1.QuestionID = q1.QuestionID
+	WHERE q1.QuestionText LIKE '%What is your gender%' AND a1.AnswerText NOT IN ('-1','43','N/A','')
+),
+tamaño_empresa AS(
+	SELECT
+  		a1.UserID,
+    	CASE WHEN a1.AnswerText IN ('1-5','6-25') THEN 'Small'
+    		WHEN a1.AnswerText IN('26-100','100-500') THEN 'Medium'
+    		WHEN a1.AnswerText IN('500-1000','More than 1000') THEN 'Big' END AS Tamaño_de_Compañia
+	FROM Answer AS a1
+	JOIN Question AS q1
+		ON a1.QuestionID = q1.QuestionID
+	WHERE q1.questiontext LIKE '%How many employees%'AND a1.AnswerText NOT IN ('', '-1', 'N/A')
+),
+tratamiento AS (
+    SELECT a.UserID,
+           CASE WHEN a.AnswerText = '1' THEN 1 ELSE 0 END AS Tratamiento
+    FROM Answer a
+    JOIN Question q ON a.QuestionID = q.QuestionID
+    WHERE q.QuestionText LIKE '%Have you ever sought treatment%'
+),
+entorno AS (
+	SELECT
+  		a1.UserID,
+    	CASE WHEN a1.AnswerText= 'Sometimes' THEN 'Hybrid' 
+    	WHEN a1.AnswerText='Always' THEN 'Presencial'
+    	when a1.AnswerText='Never' then 'Remote' END AS TipoTrabajo
+FROM Answer AS a1
+JOIN Question AS q1 
+	ON a1.QuestionID = q1.QuestionID
+WHERE q1.QuestionText LIKE '%Do you work remotely?%'
+),data AS (
+    SELECT 
+        t.UserID,
+        t.Tratamiento,
+        p.Pais,
+        g.Genero,
+        te.Tamaño_de_Compañia,
+        en.TipoTrabajo
+    FROM tratamiento t
+    INNER JOIN pais AS p 
+  		ON t.UserID = p.UserID
+    INNER JOIN genero AS g 
+  		ON t.UserID = g.UserID
+    INNER JOIN tamaño_empresa AS te 
+  		ON t.UserID = te.UserID
+    INNER JOIN entorno AS en 
+  		ON t.UserID = en.UserID
+)
 
-9. ¿Qué factores (país, género, tamaño de empresa, cultura laboral) parecen correlacionarse más con el tratamiento?
+SELECT 
+    Pais,
+    Genero,
+    Tamaño_de_Compañia,
+    TipoTrabajo,
+    COUNT(*) AS Total_Usuarios,
+    ROUND(SUM(Tratamiento) * 100.0 / COUNT(*), 2) AS Porcentaje_Tratamiento
+FROM data
+GROUP BY Pais, Genero, Tamaño_de_Compañia, TipoTrabajo
+ORDER BY Total_Usuarios DESC,Porcentaje_Tratamiento DESC;
+```
+**Objetivo:** Identificar factores están más asociados a tener tratamiento de salud mental 
 
-10. 
+9. 
 ---
