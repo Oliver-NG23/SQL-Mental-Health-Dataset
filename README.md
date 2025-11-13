@@ -36,7 +36,7 @@ ORDER BY s.SurveyID;
 ```
 **Objetivo:** Saber cuantas personas participaron en la aplicacion de la encuesta a lo largo de los años
 
-2. ¿De que paises provienen los encuestados?
+2. ¿Como ha cambiado a lo largo de los años el porcentaje de empleados con tratamiento?
 ```sql
 SELECT 
     s.SurveyID AS Año,
@@ -257,5 +257,29 @@ GROUP BY Pais, Genero, Tamaño_de_Compañia, TipoTrabajo
 ORDER BY Total_Usuarios DESC,Porcentaje_Tratamiento DESC;
 ```
 **Objetivo:** Identificar factores están más asociados a tener tratamiento de salud mental 
+
+10.¿Las personas que han tenido problemas de salud mental alguna vez los comunican a su empleador?
+
+```sql
+SELECT 
+    CASE 
+        WHEN a1.AnswerText = 1 THEN 'Comunicado al empleador'
+        WHEN a1.AnswerText = 0 THEN 'No comunicado'
+        ELSE 'No especificado'
+    END AS Comunicacion_Empleador,
+    ROUND(
+        COUNT(DISTINCT a1.UserID) * 100.0 / 
+        SUM(COUNT(DISTINCT a1.UserID)) OVER (), 2
+    ) AS Porcentaje_Usuarios
+FROM Answer AS a1
+JOIN Question AS q1 
+    ON a1.QuestionID = q1.QuestionID
+WHERE q1.QuestionText LIKE '%Have you ever discussed your mental health with your employer%' 
+  AND a1.AnswerText NOT IN ('', 'N/A')
+GROUP BY Comunicacion_Empleador
+ORDER BY Porcentaje_Usuarios DESC;
+```
+**Objetivo:** Evaluar la comunicacion dentro de la empresa
+
 
 ---
