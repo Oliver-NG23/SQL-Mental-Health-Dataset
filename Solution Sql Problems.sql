@@ -1,5 +1,5 @@
 
-1. ¿Cúantos participantes aplicaron la encuesta durante los años?
+--1. ¿Cúantos participantes aplicaron la encuesta durante los años?
 
 SELECT s.SurveyID, s.Description, COUNT(a.AnswerText) AS TotalAnswers
 FROM Answer AS a
@@ -8,10 +8,10 @@ ON a.SurveyID = s.SurveyID
 GROUP BY s.SurveyID, s.Description
 ORDER BY s.SurveyID;
 
-**Objetivo:** Saber cuantas personas participaron en la aplicacion de la encuesta a lo largo de los años
+--Objetivo: Saber cuantas personas participaron en la aplicacion de la encuesta a lo largo de los años
 
-2. ¿Como ha cambiado a lo largo de los años el porcentaje de empleados con tratamiento?
-```sql
+--2. ¿Como ha cambiado a lo largo de los años el porcentaje de empleados con tratamiento?
+
 SELECT 
     s.SurveyID AS Año,
     ROUND(SUM(CASE WHEN a.AnswerText = '1' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS Porcentaje_Tratamiento
@@ -23,11 +23,11 @@ JOIN Survey s
 WHERE q.QuestionText LIKE '%Have you ever sought treatment%'
 GROUP BY s.SurveyID, s.Description
 ORDER BY s.SurveyID;
-```
-**Objetivo:** Conocer la variacion de haber recibido tratamiento a lo largo de los años
 
-3. ¿De que paises provienen los encuestados?
-```sql
+--**Objetivo:** Conocer la variacion de haber recibido tratamiento a lo largo de los años
+
+--3. ¿De que paises provienen los encuestados?
+
 SELECT 
 	CASE WHEN answertext IN ('United States of America','United States') THEN 'United States'
     ELSE answertext END AS pais, COUNT(*) AS cuenta
@@ -35,9 +35,9 @@ FROM Answer
 WHERE questionid = 3 AND answertext NOT IN( '-1', 'N/A','') AND answertext IS NOT NULL
 GROUP BY pais
 ORDER BY cuenta DESC;
-```
-4. ¿Qué porcentaje de encuestados ha recibido tratamiento para su salud mental? 
-```sql
+
+--4. ¿Qué porcentaje de encuestados ha recibido tratamiento para su salud mental? 
+
 SELECT CASE WHEN a.AnswerText = 1 THEN 'YES' ELSE 'NO' END AS Respuesta,
 	COUNT(a.AnswerText) AS Total_Respuesta,
     ROUND(COUNT(*) * 100.0 / SUM (COUNT(*)) OVER (),4) AS porcentaje
@@ -46,11 +46,11 @@ JOIN Question AS q
 ON a.QuestionID = q.QuestionID
 WHERE q.QuestionText LIKE '%Have you ever sought treatment%'
 group by a.AnswerText;
-```
-**Objetivo:** Conocer antecedentes de los empleados y su distribucion
 
-5. ¿Cuáles son los 5 países con mayor porcentaje de encuestados que reportan haber recibido tratamiento?
-```sql
+--**Objetivo:** Conocer antecedentes de los empleados y su distribucion
+
+--5. ¿Cuáles son los 5 países con mayor porcentaje de encuestados que reportan haber recibido tratamiento?
+
 SELECT  
 	CASE 
         WHEN a.AnswerText IN ('United States of America', 'United States') THEN 'United States'
@@ -74,11 +74,11 @@ WHERE q.QuestionText LIKE '%country%' AND answertext NOT IN( '-1', 'N/A','')
 GROUP BY Pais
 ORDER BY Porcentaje DESC, s.SurveyID DESC
 LIMIT 5;
-```
-**Objetivo:** Conocer si es un factor el pais de procedencia recibir tratamiento para la salud mental
 
-6. ¿Existe relación entre el tamaño de la empresa y la probabilidad de haber recibido tratamiento?  
-```sql
+--**Objetivo:** Conocer si es un factor el pais de procedencia recibir tratamiento para la salud mental
+
+--6. ¿Existe relación entre el tamaño de la empresa y la probabilidad de haber recibido tratamiento?  
+
 SELECT 
     CASE WHEN a1.AnswerText IN ('1-5','6-25') THEN 'Small'
     WHEN a1.AnswerText IN('26-100','100-500') THEN 'Medium'
@@ -100,11 +100,11 @@ WHERE q1.QuestionText LIKE '%How many employees%'
   AND a1.AnswerText NOT IN ('-1', 'N/A', '') AND a1.AnswerText IS NOT NULL
 GROUP BY Tamaño_de_Compañia
 ORDER BY Porcentaje_Tratamiento DESC;
-```
-**Objetivo:** Conocer si hay relacion entre el tamaño de empresa y la probabilidad de recibir tratamiento
 
-7. ¿Cuál es la realción entre el género y la probabilidad de haber recibido tratamiento?
-```sql
+--**Objetivo:** Conocer si hay relacion entre el tamaño de empresa y la probabilidad de recibir tratamiento
+
+--7. ¿Cuál es la realción entre el género y la probabilidad de haber recibido tratamiento?
+
 SELECT 
     CASE WHEN a1.AnswerText IN ('Masculine','Male','male','MALE','masculino') THEN 'Male'
     WHEN a1.AnswerText IN ('Female','female','FEMALE') THEN 'Female' ELSE 'Other' END AS Genero,
@@ -123,11 +123,11 @@ WHERE q1.QuestionText LIKE '%What is your gender%' AND a1.AnswerText NOT IN ('-1
       	AND subA.AnswerText = '1')
 GROUP BY Genero
 ORDER BY Total_Usuarios DESC;
-```
-**Objetivo:** Conocer si existen diferencias de genero en la busqueda de tratamiento
 
-8. ¿Las personas que trabajan en diferentes entornos de trabajo muestran diferencias en salud mental?
-```sql
+--**Objetivo:** Conocer si existen diferencias de genero en la busqueda de tratamiento
+
+--8. ¿Las personas que trabajan en diferentes entornos de trabajo muestran diferencias en salud mental?
+
 SELECT 
     CASE WHEN a1.AnswerText= 'Sometimes' THEN 'Hybrid' 
     WHEN a1.AnswerText='Always' THEN 'Presencial'
@@ -146,11 +146,11 @@ WHERE q1.QuestionText LIKE '%Do you work remotely?%'
       	AND subA.AnswerText = '1')
 GROUP BY TipoTrabajo
 ORDER BY Total_Usuarios DESC;
-```
-**Objetivo:** Identificar si el entorno de trabajo influye en los niveles de estrés o necesidad de tratamiento
+
+--**Objetivo:** Identificar si el entorno de trabajo influye en los niveles de estrés o necesidad de tratamiento
  
-9. ¿Qué factores (país, género, tamaño de empresa, cultura laboral) parecen correlacionarse más con el tratamiento?
-```sql
+--9. ¿Qué factores (país, género, tamaño de empresa, cultura laboral) parecen correlacionarse más con el tratamiento?
+
 WITH pais AS (
     SELECT a.UserID,
         CASE 
@@ -229,12 +229,12 @@ SELECT
 FROM data
 GROUP BY Pais, Genero, Tamaño_de_Compañia, TipoTrabajo
 ORDER BY Total_Usuarios DESC,Porcentaje_Tratamiento DESC;
-```
-**Objetivo:** Identificar factores están más asociados a tener tratamiento de salud mental 
 
-10.¿Las personas que han tenido problemas de salud mental alguna vez los comunican a su empleador?
+--**Objetivo:** Identificar factores están más asociados a tener tratamiento de salud mental 
 
-```sql
+--10.¿Las personas que han tenido problemas de salud mental alguna vez los comunican a su empleador?
+
+
 SELECT 
     CASE 
         WHEN a1.AnswerText = 1 THEN 'Comunicado al empleador'
@@ -252,5 +252,5 @@ WHERE q1.QuestionText LIKE '%Have you ever discussed your mental health with you
   AND a1.AnswerText NOT IN ('', 'N/A')
 GROUP BY Comunicacion_Empleador
 ORDER BY Porcentaje_Usuarios DESC;
-```
+
 **Objetivo:** Evaluar la comunicacion dentro de la empresa
